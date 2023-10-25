@@ -1,33 +1,50 @@
-<?php
-// Create database connection using config file
-include_once("config.php");
- 
-// Fetch all users data from database
-$result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC");
-?>
- 
 <html>
-<head>    
-    <title>Homepage</title>
+<head>
+    <title>Add Users</title>
 </head>
  
 <body>
-<a href="add.php">Add New User</a><br/><br/>
+    <a href="index.php">Go to Home</a>
+    <br/><br/>
  
-    <table width='80%' border=1>
+    <form action="add.php" method="post" name="form1">
+        <table width="25%" border="0">
+            <tr> 
+                <td>Name</td>
+                <td><input type="text" name="name"></td>
+            </tr>
+            <tr> 
+                <td>Email</td>
+                <td><input type="text" name="email"></td>
+            </tr>
+            <tr> 
+                <td>Mobile</td>
+                <td><input type="text" name="mobile"></td>
+            </tr>
+            <tr> 
+                <td></td>
+                <td><input type="submit" name="Submit" value="Add"></td>
+            </tr>
+        </table>
+    </form>
+    
+    <?php
  
-    <tr>
-        <th>Name</th> <th>Mobile</th> <th>Email</th> <th>Update</th>
-    </tr>
-    <?php  
-    while($user_data = mysqli_fetch_array($result)) {         
-        echo "<tr>";
-        echo "<td>".$user_data['name']."</td>";
-        echo "<td>".$user_data['mobile']."</td>";
-        echo "<td>".$user_data['email']."</td>";    
-        echo "<td><a href='edit.php?id=$user_data[id]'>Edit</a> | <a href='delete.php?id=$user_data[id]'>Delete</a></td></tr>";        
+    // Check If form submitted, insert form data into users table.
+    if(isset($_POST['Submit'])) {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $mobile = $_POST['mobile'];
+        
+        // include database connection file
+        include_once("config.php");
+                
+        // Insert user data into table
+        $result = mysqli_query($mysqli, "INSERT INTO users(name,email,mobile) VALUES('$name','$email','$mobile')");
+        
+        // Show message when user added
+        echo "User added successfully. <a href='index.php'>View Users</a>";
     }
     ?>
-    </table>
 </body>
 </html>
